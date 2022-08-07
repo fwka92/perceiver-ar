@@ -429,7 +429,7 @@ def load(
     events = r
     # get indexes of events:
     event_idxs = r
-    event_length = tf.shape(events)[0]
+    event_length = tf.shape(events)
     original_data_length = tf.size(events)
 
     # If the raw sequence is abcdefg and minimum crop is length 4,
