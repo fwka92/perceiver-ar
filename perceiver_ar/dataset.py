@@ -472,10 +472,7 @@ def load(
                 event_idxs = event_idxs[crop_start:crop_start + max_context_length]
                 event_length = event_length[crop_start + max_context_length - 1]
             except:
-                # when out ouf bounds use crop_start 0:
-                events = events[0:max_context_length]
-                event_idxs = event_idxs[0:max_context_length]
-                event_length = event_length[max_context_length - 1]
+                pass
             ds = tf.data.Dataset.from_tensors({
                 'events': events,
                 'event_idxs': event_idxs,
