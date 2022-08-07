@@ -439,7 +439,7 @@ def load(
         # We always need at least one token to predict.
         2 if include_sos else 1)
     min_crop_length = tf.reduce_min(
-        [max_context_length, tf.shape(events)[0], min_crop_length])
+        [max_context_length, tf.shape(events), min_crop_length])
 
     padding_length = max_context_length - min_crop_length
     events = tf.pad(events, [[padding_length, 0]])
@@ -448,11 +448,11 @@ def load(
 
     if is_training:
       # For training, select a single crop.
-      if tf.shape(events)[0] > max_context_length:
+      if tf.shape(events) > max_context_length:
         crop_start = tf.random.uniform(
             [],
             minval=0,
-            maxval=tf.shape(events)[0] - max_context_length + 1,
+            maxval=tf.shape(events) - max_context_length + 1,
             dtype=tf.int32)
       else:
         crop_start = 0
@@ -482,9 +482,9 @@ def load(
 
       def flat_map_fn(x):
         ds = tf.data.Dataset.zip(
-            (x['events'].batch(max_context_length),
-             x['event_idxs'].batch(max_context_length),
-             x['input_length'].batch(max_context_length)))
+            (x.batch(max_context_length),
+             x.batch(max_context_length),
+             x.batch(max_context_length)))
 
         def reconstruct_dict(events, event_idxs, input_length):
           return {
