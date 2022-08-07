@@ -18,12 +18,14 @@
 import abc
 import enum
 import functools
-from typing import Mapping, Optional, Sequence, Text
+from typing import Mapping, Optional, Sequence, Text, List
 
 from absl import logging
 import jax
 import numpy as np
+import youtokentome as yttm
 import tensorflow as tf
+import pickle
 import tensorflow_datasets as tfds
 
 Batch = Mapping[Text, np.ndarray]
@@ -40,7 +42,7 @@ SOS_ID = RESERVED_TOKENS.index(SOS)  # Normally 2
 
 # Seed for seeded-shuffle evaluation.
 SEEDED_SHUFFLE_SEEDS = (42, 17)
-
+MUSIC_DATASET = pickle.load(open('/content/drive/MyDrive/dataset.pkl', 'rb'))
 
 class Split(enum.Enum):
   r"""Events dataset split."""
@@ -282,6 +284,36 @@ class RandomMirroredDataset(Dataset):
     return [self._sequence_length + 1]
 
 
+class MusicDataset(Dataset):
+    """A small bpe dataset for music modeling."""
+
+    def __init__(self, tokenizer: str, tokens: List[int], sequence_length: int = 16384):
+        self._sequence_length = sequence_length
+        self.bpe = yttm.BPE(tokenizer)
+        self.dataset = tokens
+
+    def load(self, split: Split, is_training: bool, include_sos: bool):
+        del is_training
+        ds = tf.data.Dataset.from_tensor_slices(self.dataset)
+        return ds
+
+    @property
+    def vocab_size(self) -> int:
+        return self.bpe.vocab_size()
+
+    @property
+    def event_idx_size(self) -> Sequence[int]:
+        return [self._sequence_length]
+
+    @property
+    def sequence_length(self) -> int:
+        return self._sequence_length
+
+    @property
+    def num_sequences(self) -> int:
+        return len(self.dataset)
+
+
 DATASET_LOADERS = {
     'downsampled_imagenet_w_positions':
         DownsampledImagenetWithPositionsDataset(),
@@ -307,6 +339,7 @@ DATASET_LOADERS = {
     'random_mirrored_65536': RandomMirroredDataset(sequence_length=65536),
     'random_mirrored_131072': RandomMirroredDataset(sequence_length=131072),
     'random_mirrored_24578': RandomMirroredDataset(sequence_length=24578),
+    'music_16384': MusicDataset(tokenizer='music.bpe.model', tokens=MUSIC_DATASET, sequence_length=16384),
 }
 
 
