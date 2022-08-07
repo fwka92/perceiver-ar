@@ -418,7 +418,7 @@ def get_sweep(sweep_name, train_device_count, eval_device_count):
         (f'{MODEL_KWARGS}.position_encoding', 'random'),
         (f'{MODEL_KWARGS}.learnable_position_embeddings', True),
         (f'{MODEL_KWARGS}.use_positions_from_data', True),
-        ('dataset_loader', 'downsampled_music_16384'),
+        ('dataset_loader', 'music_16384'),
 
         # Switch to cosine for final 50k.
         # hyper.sweep(f'{EXP_CONFIG}.optimizer.schedule_type', ['cosine']),
