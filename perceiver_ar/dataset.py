@@ -460,7 +460,7 @@ def load(
         crop_start = tf.random.uniform(
             [],
             minval=0,
-            maxval=tf.shape(events) - max_context_length + 1,
+            maxval=tf.shape(events).shape[0] - max_context_length + 1,
             dtype=tf.int32)
       else:
         crop_start = 0
