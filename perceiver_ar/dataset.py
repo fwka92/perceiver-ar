@@ -438,8 +438,11 @@ def load(
         minimum_crop_length,
         # We always need at least one token to predict.
         2 if include_sos else 1)
-    min_crop_length = tf.reduce_min(
-        [max_context_length, tf.shape(events), min_crop_length])
+    try:
+        min_crop_length = tf.reduce_min(
+            [max_context_length, tf.shape(events), min_crop_length])
+    except:
+        pass
 
     padding_length = max_context_length - min_crop_length
     events = tf.pad(events, [[padding_length, 0]])
