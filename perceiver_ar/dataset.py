@@ -534,9 +534,9 @@ def load(
         lambda r: {k: v for k, v in r.items() if k != 'original_data_length'})
 
     def remove_leading_padding(r):
-        if r['input_length'] < max_context_length:
-            r['events'] = r['events'][-r['input_length']:]
-            r['event_idxs'] = r['event_idxs'][-r['input_length']:]
+        # if r['input_length'] < max_context_length:
+        #     r['events'] = r['events'][-r['input_length']:]
+        #     r['event_idxs'] = r['event_idxs'][-r['input_length']:]
         return r
 
     ds = ds.map(remove_leading_padding, num_parallel_calls=AUTOTUNE)
