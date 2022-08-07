@@ -448,6 +448,8 @@ def load(
     events = tf.reshape(events, [-1])
     #make event_idxes shape rank 2:
     event_idxs = tf.reshape(event_idxs, [-1, 1])
+    # make event_length shape rank 2:
+    event_length = tf.reshape(event_length, [-1, 1])
 
     padding_length = max_context_length - min_crop_length
     events = tf.pad(events, [[padding_length, 0]])
