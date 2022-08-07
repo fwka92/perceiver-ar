@@ -26,7 +26,7 @@ from typing import Mapping, Optional, Text, Tuple
 from absl import app
 from absl import flags
 from absl import logging
-from . import dataset
+from ..perceiver_ar import dataset
 import dill
 import haiku as hk
 import jax
@@ -35,11 +35,11 @@ from jaxline import base_config
 from jaxline import experiment
 from jaxline import platform
 from jaxline import utils
-from . import losses
+from perceiver_ar import losses
 from ml_collections import config_dict
 import numpy as np
 import optax
-from . import perceiver_ar_model
+from ..perceiver_ar import perceiver_ar_model
 import tensorflow as tf
 
 FLAGS = flags.FLAGS
