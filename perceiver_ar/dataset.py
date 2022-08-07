@@ -428,7 +428,7 @@ def load(
   def generate_crops(r, minimum_crop_length=0):
     events = r
     # get indexes of events:
-    event_idxs = tf.range(tf.shape(events)[0])
+    event_idxs = r
     event_length = tf.range(tf.shape(events)[0]) + 1
     original_data_length = tf.size(events)
 
