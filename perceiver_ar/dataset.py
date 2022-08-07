@@ -426,8 +426,9 @@ def load(
   # `abcdefgh` are `a00`, `ab0`, `abc`, `bcd`, ..., `efg`, `fgh`.
   # These may be subsampled.
   def generate_crops(r, minimum_crop_length=0):
-    events = r['events']
-    event_idxs = r['event_idxs']
+    events = r
+    # get indexes of events:
+    event_idxs = tf.range(tf.shape(events)[0])
     event_length = tf.range(tf.shape(events)[0]) + 1
     original_data_length = tf.size(events)
 
