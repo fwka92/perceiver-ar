@@ -42,7 +42,7 @@ SOS_ID = RESERVED_TOKENS.index(SOS)  # Normally 2
 
 # Seed for seeded-shuffle evaluation.
 SEEDED_SHUFFLE_SEEDS = (42, 17)
-MUSIC_DATASET = pickle.load(open('/content/drive/MyDrive/dataset.pkl', 'rb'))
+MUSIC_DATASET = pickle.load(open('dataset.pkl', 'rb'))
 
 class Split(enum.Enum):
   r"""Events dataset split."""
