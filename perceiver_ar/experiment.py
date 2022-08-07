@@ -400,6 +400,46 @@ def get_sweep(sweep_name, train_device_count, eval_device_count):
     train_batch_sizes = [2048]
     train_batch_sizes_per_device = [1]
     eval_batch_size_per_device = 4
+  elif sweep_name == 'music_16384':
+    sweep_parameters = [
+        # ----- Start active sweep ------
+        ('max_context_length', 16384),
+        (f'{MODEL_KWARGS}.max_wavelength', 16384),
+        (f'{MODEL_KWARGS}.input_embed_dim', 1024),
+        (f'{MODEL_KWARGS}.num_cross_attend_heads', 16),
+        (f'{MODEL_KWARGS}.fraction_to_rotate', 0.5),
+        (f'{MODEL_KWARGS}.num_transformers_per_block', 60),
+
+        (f'{MODEL_KWARGS}.z_index_dim', 1024),
+        (f'{EXP_CONFIG}.evaluation.eval_block_size', 512),
+        (f'{EXP_CONFIG}.evaluation.max_examples', 0),
+
+        (f'{MODEL_KWARGS}.position_encoding_type', 'absolute'),
+        (f'{MODEL_KWARGS}.position_encoding', 'random'),
+        (f'{MODEL_KWARGS}.learnable_position_embeddings', True),
+        (f'{MODEL_KWARGS}.use_positions_from_data', True),
+        ('dataset_loader', 'downsampled_music_16384'),
+
+        # Switch to cosine for final 50k.
+        # hyper.sweep(f'{EXP_CONFIG}.optimizer.schedule_type', ['cosine']),
+        (f'{EXP_CONFIG}.optimizer.schedule_type', 'constant'),
+        # ----- End active sweep ------
+        (f'{MODEL_KWARGS}.num_transformer_heads', 16),
+        (f'{MODEL_KWARGS}.cross_attend_widening_factor', 4),
+        (f'{MODEL_KWARGS}.transformer_widening_factor', 4),
+        (f'{MODEL_KWARGS}.activation_name', 'sq_relu'),
+        (f'{EXP_CONFIG}.optimizer.max_norm', 1.0),
+        (f'{EXP_CONFIG}.optimizer.optimizer', 'adam'),
+        (f'{EXP_CONFIG}.optimizer.base_lr', 3e-4),
+        (f'{MODEL_KWARGS}.num_z_channels', 1024),
+        (f'{EXP_CONFIG}.optimizer.warmup_steps', 1e4),
+        (f'{MODEL_KWARGS}.dropout_prob', 0.1),
+        (f'{MODEL_KWARGS}.latent_dropout_prob', 0.0),
+        ('random_seed', 1),
+    ]
+    train_batch_sizes = [2048]
+    train_batch_sizes_per_device = [1]
+    eval_batch_size_per_device = 4
   else:
     raise ValueError(f'Unknown sweep name: {sweep_name}')
 
