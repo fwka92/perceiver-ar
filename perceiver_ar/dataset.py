@@ -456,7 +456,7 @@ def load(
 
     if is_training:
       # For training, select a single crop.
-      if tf.shape(events) > max_context_length:
+      if tf.shape(events).shape[0] > max_context_length:
         crop_start = tf.random.uniform(
             [],
             minval=0,
