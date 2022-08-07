@@ -429,8 +429,8 @@ def load(
     events = r
     # get indexes of events:
     event_idxs = r
-    event_length = tf.shape(events)
-    original_data_length = tf.size(events)
+    event_length = tf.shape(events).shape[0]
+    original_data_length = tf.size(events).shape[0]
 
     # If the raw sequence is abcdefg and minimum crop is length 4,
     # we see abcd, abcde, ..., abcdefg, but not a, ab, or abc.
